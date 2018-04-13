@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Authorization to:
+  </title>
+</head>
+
+<body>
+  <form id="confirm-form">
+    <h3>User Authorization</h3>
+    <div>
+      <p>Dear
+        <%- username %>, application wants the following access to your data in the OAuth Protected Resource Server:</p>
+      <p>Do you agree?</p>
+    </div>
+    <button id="agree-btn">Agree</button>
+    <button id="deny-btn">Deny</button>
+    <button id="logout-btn">Log out</button>
+  </form>
+  <input id="oauth-uri-input" type="hidden" name="oauth_uri" value="<%= callbackUri %>" />
+
+  <script type="text/javascript">
+    var form = byId('confirm-form');
+    var agreeBtn = byId('agree-btn');
+    var denyBtn = byId('deny-btn');
+    var logoutBtn = byId('logout-btn');
+    var oauthUri = byId('oauth-uri-input').value;
+
+    form.onsubmit = function () {
+      return false;
+    };
+
+    agreeBtn.onclick = function () {
+      window.location.href = oauthUri + '&agree=true';
+    };
+
+    denyBtn.onclick = function () {
+      window.location.href = oauthUri + '&deny=true';
+    };
+
+    logoutBtn.onclick = function () {
+      window.location.href = oauthUri + '&logout=true&';
+    };
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+  </script>
+</body>
+
+</html>
