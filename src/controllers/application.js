@@ -1,9 +1,8 @@
-const crypto = require('crypto');
-
-import { ClientModel } from '../models/oauth.js';
+import crypto from 'crypto'
+import { Client } from '../models';
 
 export async function createClient(ctx, next) {
-  const client = new ClientModel(ctx.request.body);
+  const client = new Client(ctx.request.body);
   client.client_id = crypto
     .createHash('md5')
     .update(crypto.randomBytes(16))
@@ -21,6 +20,6 @@ export async function createClient(ctx, next) {
 }
 
 export async function getClient(ctx, next) {
-  const client = await ClientModel.findOne({ name: ctx.request.name });
+  const client = await Client.findOne({ name: ctx.request.name });
   ctx.body = client;
 }

@@ -5,7 +5,7 @@ import OAuth2Server from 'oauth2-server';
 const Request = OAuth2Server.Request;
 const Response = OAuth2Server.Response;
 
-class TraumlandOAuth {
+class SomniOAuth {
   constructor(options) {
     this.options = options || {};
     this.server = new OAuth2Server(this.options);
@@ -131,4 +131,4 @@ var handleError = async function (e, ctx, response, next) {
   }
 };
 
-export default TraumlandOAuth;
+export default SomniOAuth;

@@ -4,10 +4,10 @@ import config from '../../config';
 
 import AccessTokenModel from './oauth/access-token';
 import AuthorizationCodeModel from './oauth/authorization-code';
-import ClientModel from './oauth/client';
+import Client from './oauth/client';
 import refreshTokenModel from './oauth/refresh-token';
-import ScopeModel from './oauth/scope';
-import UserModel from './user';
+import Scope from './oauth/scope';
+import User from './user';
 
 // /**
 //  * Generate access token.
@@ -140,7 +140,7 @@ async function getClient(clientId, clientSecret) {
       params.client_secret = clientSecret;
     }
 
-    let client = await ClientModel.findOne(params).lean();
+    let client = await Client.findOne(params).lean();
 
     if (!client) {
       return false;
@@ -163,9 +163,9 @@ async function getClient(clientId, clientSecret) {
  */
 async function getUser(username, password) {
   try {
-    let user = await UserModel.findByUsername(username).lean();
+    let user = await User.findByUsername(username).lean();
     if (user) {
-      if (await UserModel.checkPassword(password, user.password)) {
+      if (await User.checkPassword(password, user.password)) {
         return user;
       } else {
         return false;
@@ -185,7 +185,7 @@ async function getUserFromClient(client) {
   console.log('getUserFromClient', client);
 
   try {
-    let user = await UserModel.findById(client.user).lean();
+    let user = await User.findById(client.user).lean();
 
     if (!user) {
       return false;
@@ -342,9 +342,9 @@ async function verifyScope(accessToken, scope) {
 export {
   AccessTokenModel,
   AuthorizationCodeModel,
-  ClientModel,
+  Client,
   refreshTokenModel,
-  ScopeModel,
+  Scope,
   // generateAccessToken,
   // generateRefreshToken,
   getAccessToken,

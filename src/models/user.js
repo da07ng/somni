@@ -68,6 +68,6 @@ UserSchema.statics.checkPassword = async function (password, hash) {
   return bcrypt.compareSync(shasum.digest('hex'), hash);
 };
 
-const userModel = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-export default userModel;
+export default User;

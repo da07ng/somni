@@ -7,6 +7,6 @@ const ScopeSchema = new Schema({
   is_default: Boolean
 });
 
-const ScopeModel = mongoose.model('Scope', ScopeSchema);
+const Scope = mongoose.model('Scope', ScopeSchema);
 
-export default ScopeModel;
+export default Scope;

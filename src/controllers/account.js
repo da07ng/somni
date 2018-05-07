@@ -1,7 +1,7 @@
-import UserModel from '../models/user.js';
+import { User } from '../models';
 
 export async function register(ctx, next) {
-  const user = new UserModel(ctx.request.body);
+  const user = new User(ctx.request.body);
 
   try {
     await user.save();
@@ -18,9 +18,9 @@ export async function signin(ctx, next) {
   let password = ctx.request.body.password;
   let callbackUri = ctx.request.body.callback_uri;
 
-  let user = await UserModel.findByUsername(username);
+  let user = await User.findByUsername(username);
   if (user) {
-    if (await UserModel.checkPassword(password, user.password)) {
+    if (await User.checkPassword(password, user.password)) {
       ctx.session.loginUser = {
         userid: user._id,
         username: username
