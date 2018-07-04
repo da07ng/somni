@@ -1,0 +1,11 @@
+type Info {
+  id: ID!
+  height: String
+  weight: Int
+  hobby: [String]
+}
+
+type Query {
+  infos: [Info]
+  info(id: ID!): Info
+}
