@@ -43,17 +43,17 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.path('password').set(function (v) {
-  let shasum = crypto.createHash('sha256');
-  shasum.update(v);
+UserSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    let shasum = crypto.createHash('sha256');
+    shasum.update(this.password);
 
-  const saltRounds = 10;
-  const hash = bcrypt.hashSync(shasum.digest('hex'), saltRounds);
+    const saltRounds = 10;
+    const hashPassword = await bcrypt.hash(shasum.digest('hex'), saltRounds);
 
-  return hash;
-});
+    this.password = hashPassword;
+  }
 
-UserSchema.pre('save', function (next) {
   this.updated = Date.now();
   next();
 });
@@ -68,11 +68,17 @@ UserSchema.statics.findByUsername = function (username) {
   });
 };
 
-UserSchema.statics.checkPassword = async function (password, hash) {
+UserSchema.statics.findByEmail = function (email) {
+  return this.findOne({
+    email: email
+  });
+};
+
+UserSchema.statics.checkPassword = function (password, hash) {
   let shasum = crypto.createHash('sha256');
   shasum.update(password);
 
-  return bcrypt.compareSync(shasum.digest('hex'), hash);
+  return bcrypt.compare(shasum.digest('hex'), hash);
 };
 
 const User = mongoose.model('User', UserSchema);

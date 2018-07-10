@@ -3,13 +3,12 @@ import { Container, Grid, Form, Button } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
+const SIGNUP = gql`
+  mutation signup($username: String!, $email: String!, $password: String!) {
+    signup(username: $username, email: $email, password: $password) {
       id
       username
       email
-      password
     }
   }
 `;
@@ -24,24 +23,42 @@ class Signup extends Component {
     this.passwordInputRef = React.createRef();
   }
 
-  onSubmit(event, mutate) {
+  async onSubmit(event, signup, client) {
     event.preventDefault();
 
     const username = this.usernameInputRef.current.value;
     const email = this.emailInputRef.current.value;
     const password = this.passwordInputRef.current.value;
 
-    console.log(username, email, password);
+    try {
+      const result = await signup({
+        variables: { username: username, email: email, password: password }
+      });
 
-    mutate({
-      variables: { username: username, email: email, password: password }
-    });
+      if (result.data.signup) {
+        client.writeData({
+          data: {
+            account: {
+              __typename: 'Account',
+              loggedIn: true,
+              user: {
+                __typename: 'User',
+                id: result.data.signup.id,
+                username: result.data.signup.username
+              }
+            }
+          }
+        });
+      }
+    } catch (error) {
+      // console.log(error);
+    }
   }
 
   render() {
     return (
-      <Mutation mutation={ADD_USER}>
-        {addUser => (
+      <Mutation mutation={SIGNUP}>
+        {(signup, { client }) => (
           <div id="main">
             <Container>
               <Grid centered>
@@ -49,7 +66,7 @@ class Signup extends Component {
                   {/* <Form onSubmit={this.onSubmit}> */}
                   <Form
                     onSubmit={event => {
-                      this.onSubmit(event, addUser);
+                      this.onSubmit(event, signup, client);
                     }}
                   >
                     <Form.Field>

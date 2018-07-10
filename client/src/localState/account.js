@@ -5,8 +5,8 @@ const account = {
       loggedIn: false,
       user: {
         __typename: 'User',
-        id: '1',
-        username: 'da07ng'
+        id: '',
+        username: ''
       }
     }
   },

@@ -14,16 +14,16 @@ export async function signup(ctx, next) {
 }
 
 export async function signin(ctx, next) {
-  let username = ctx.request.body.username;
+  let account = ctx.request.body.account;
   let password = ctx.request.body.password;
   let callbackUri = ctx.request.body.callback_uri;
 
-  let user = await User.findByUsername(username);
+  let user = await User.findByUsername(account);
   if (user) {
     if (await User.checkPassword(password, user.password)) {
       ctx.session.loginUser = {
         userid: user._id,
-        username: username
+        username: account
       };
 
       ctx.redirect(callbackUri);
