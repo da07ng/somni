@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+// import Header from '../../components/Header';
+// import Footer from '../../components/Footer';
 
 class DefaultLayout extends Component {
   constructor(props) {
@@ -10,10 +10,12 @@ class DefaultLayout extends Component {
 
   render() {
     return (
-      <div className="default-layout">
-        <Header />
-        {React.cloneElement(this.props.children, { data: this.props.data })}
-        <Footer />
+      <div className="exhibition">
+        {/* <Header /> */}
+        {React.cloneElement(this.props.children, {
+          account: this.props.data.account
+        })}
+        {/* <Footer /> */}
       </div>
     );
   }

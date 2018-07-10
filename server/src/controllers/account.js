@@ -1,6 +1,6 @@
 import { User } from '../models';
 
-export async function register(ctx, next) {
+export async function signup(ctx, next) {
   const user = new User(ctx.request.body);
 
   try {
@@ -9,7 +9,7 @@ export async function register(ctx, next) {
       id: user._id
     };
   } catch (err) {
-    console.log('register - Err: ', err);
+    console.log('signup - Err: ', err);
   }
 }
 

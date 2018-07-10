@@ -1,63 +1,58 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-
-import * as AccountActions from '../../actions/account'
+import React, { Component } from 'react';
+import { Container, Grid, Form, Button } from 'semantic-ui-react';
 
 class Signin extends Component {
   constructor(props) {
-    super(props)
-    this.onSubmit = this.onSubmit.bind(this)
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const account = this.refs.account.value
-    const password = this.refs.password.value
+    const account = this.refs.account.value;
+    const password = this.refs.password.value;
 
-    this.props.actions.signin(account, password)
+    console.log(account, password);
   }
 
   render() {
     return (
       <div id="main">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 col-md-offset-3">
-              <form onSubmit={this.onSubmit}>
-                <h2 className="form-login-heading">Signin</h2>
-                <div className="form-group">
-                  <label htmlFor="account">Account</label>
-                  <input type="text" className="form-control" name="account" ref="account" placeholder="Email or Username" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input type="password" className="form-control" name="password" ref="password" placeholder="Password" />
-                </div>
-                <button type="submit" className="btn btn-default">登录</button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <Container>
+          <Grid>
+            <Grid.Row centered>
+              <Grid.Column mobile={16} tablet={8} computer={6}>
+                <Form onSubmit={this.onSubmit}>
+                  <Form.Field>
+                    <label>Account</label>
+                    <input
+                      type="text"
+                      name="account"
+                      ref="account"
+                      placeholder="Email or Username"
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      name="account"
+                      ref="password"
+                      placeholder="Password"
+                    />
+                  </Form.Field>
+                  <Button primary type="submit">
+                    登录
+                  </Button>
+                </Form>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
       </div>
-    )
+    );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    account: state.account
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(AccountActions, dispatch)
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Signin)
+export default Signin;

@@ -12,7 +12,7 @@ function register(app) {
   const router = new Router();
 
   router
-    .post('/register', accountController.register)
+    .post('/signup', accountController.signup)
     .post('/signin', accountController.signin)
     .post('/signout', accountController.signout)
     .get('/client', applicationController.getClient)

@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 const WorkbenchLayout = ({ children }) => (
-  <div className="workbench-layout">
+  <div className="workbench">
     <Header />
     {children}
     <Footer />

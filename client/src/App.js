@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 
 import DefaultLayout from './layouts/DefaultLayout';
-import WorkbenchLayout from './layouts/WorkbenchLayout';
+import AccountLayout from './layouts/AccountLayout';
+// import WorkbenchLayout from './layouts/WorkbenchLayout';
 
 import Home from './containers/Home';
 import Signup from './containers/Signup';
+import Signin from './containers/Signin';
 import NotFound from './containers/NotFound';
 
-import './styles/global-styles';
+import './styles/globalStyles';
 
 const query = gql`
   {
-    currentUser @client {
-      username
+    account @client {
+      loggedIn
+      user {
+        id
+        username
+      }
     }
   }
 `;
@@ -35,9 +41,15 @@ class App extends Component {
           )}
         />
         <Route path="/signup" render={() => (
-            <WorkbenchLayout data={this.props.data}>
+            <AccountLayout data={this.props.data}>
               <Signup />
-            </WorkbenchLayout>
+            </AccountLayout>
+          )}
+        />
+        <Route path="/signin" render={() => (
+            <AccountLayout data={this.props.data}>
+              <Signin />
+            </AccountLayout>
           )}
         />
         <Route component={NotFound} />

@@ -13,6 +13,13 @@ const UserSchema = new Schema({
       dropDups: true
     }
   },
+  email: {
+    type: String,
+    index: {
+      unique: true,
+      dropDups: true
+    }
+  },
   password: {
     type: String
   },
