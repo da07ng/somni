@@ -28,18 +28,15 @@ const UserSchema = new Schema({
   },
   roles: {
     type: Array,
-    default: [],
-    index: true
+    default: []
   },
   created: {
     type: Date,
-    default: Date.now,
-    index: true
+    default: Date.now
   },
   updated: {
     type: Date,
-    default: Date.now,
-    index: true
+    default: Date.now
   }
 });
 
@@ -54,7 +51,12 @@ UserSchema.pre('save', async function (next) {
     this.password = hashPassword;
   }
 
-  this.updated = Date.now();
+  if (this.isNew) {
+    this.created = this.updated = Date.now();
+  } else {
+    this.updated = Date.now();
+  }
+
   next();
 });
 

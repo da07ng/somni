@@ -18,7 +18,13 @@ export async function signin(ctx, next) {
   let password = ctx.request.body.password;
   let callbackUri = ctx.request.body.callback_uri;
 
-  let user = await User.findByUsername(account);
+  let user;
+  if (account.indexOf('@') > -1) {
+    user = await User.findByEmail(account);
+  } else {
+    user = await User.findByUsername(account);
+  }
+
   if (user) {
     if (await User.checkPassword(password, user.password)) {
       ctx.session.loginUser = {
