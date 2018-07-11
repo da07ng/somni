@@ -1,23 +1,26 @@
 import OAuth2Server from 'oauth2-server';
-// var Promise = require('bluebird');
-// var UnauthorizedRequestError = require('oauth2-server/lib/errors/unauthorized-request-error');
+const InvalidArgumentError = require('oauth2-server/lib/errors/invalid-argument-error');
+const UnauthorizedRequestError = require('oauth2-server/lib/errors/unauthorized-request-error');
 
 const Request = OAuth2Server.Request;
 const Response = OAuth2Server.Response;
 
 class SomniOAuth {
   constructor(options) {
+    if (!options.model) {
+      throw new InvalidArgumentError('Missing parameter: `model`');
+    }
     this.options = options || {};
     this.server = new OAuth2Server(this.options);
   }
 
   authenticate(options) {
-    var that = this;
+    let that = this;
 
     return async function (ctx, next) {
-      var request = new Request(ctx.request);
-      var response = new Response(ctx.response);
-      var token;
+      let request = new Request(ctx.request);
+      let response = new Response(ctx.response);
+      let token;
 
       try {
         token = await that.server.authenticate(request, response, options);
@@ -34,12 +37,12 @@ class SomniOAuth {
   }
 
   authorize(options) {
-    var that = this;
+    let that = this;
 
     return async function (ctx, next) {
-      var request = new Request(ctx.request);
-      var response = new Response(ctx.request);
-      var code;
+      let request = new Request(ctx.request);
+      let response = new Response(ctx.request);
+      let code;
 
       try {
         code = await that.server.authorize(request, response, options);
@@ -60,12 +63,27 @@ class SomniOAuth {
   }
 
   token(options) {
-    var that = this;
+    let that = this;
 
     return async function (ctx, next) {
-      var request = new Request(ctx.request);
-      var response = new Response(ctx.response);
-      var token;
+      let request = new Request(ctx.request);
+      // let response = new Response(ctx.response);
+      let newResponse = {
+        headers: {},
+      };
+      let res = ctx.response;
+      for (let property in res) {
+        if (property !== 'headers') {
+          newResponse[property] = res[property];
+        }
+      }
+      for (let field in res.headers) {
+        newResponse.headers[field] = res.headers[field];
+      }
+      newResponse.header = newResponse.headers;
+      let response = new Response(newResponse);
+
+      let token;
 
       try {
         token = await that.server.token(request, response, options);
@@ -89,9 +107,9 @@ class SomniOAuth {
 /**
  * Handle response.
  */
-var handleResponse = async function (ctx, response) {
+let handleResponse = async function (ctx, response) {
   if (response.status === 302) {
-    var location = response.headers.location;
+    let location = response.headers.location;
     delete response.headers.location;
     ctx.set(response.headers);
     ctx.redirect(location);
@@ -105,7 +123,7 @@ var handleResponse = async function (ctx, response) {
 /**
  * Handle error.
  */
-var handleError = async function (e, ctx, response, next) {
+let handleError = async function (e, ctx, response, next) {
   if (this.useErrorHandler === true) {
     ctx.state.oauth = {
       error: e
@@ -118,10 +136,10 @@ var handleError = async function (e, ctx, response, next) {
 
     ctx.status = e.code;
 
-    // if (e instanceof UnauthorizedRequestError) {
-    //   ctx.body = "";
-    //   return;
-    // }
+    if (e instanceof UnauthorizedRequestError) {
+      ctx.body = "";
+      return;
+    }
 
     ctx.body = {
       error: e.name,
