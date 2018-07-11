@@ -19,7 +19,7 @@ class SomniOAuth {
 
     return async function (ctx, next) {
       let request = new Request(ctx.request);
-      let response = new Response(ctx.response);
+      let response = new Response(replaceResponse(ctx.response));
       let token;
 
       try {
@@ -27,8 +27,8 @@ class SomniOAuth {
         ctx.state.oauth = {
           token: token
         };
-      } catch (e) {
-        await handleError.call(that, e, ctx, null, next);
+      } catch (err) {
+        await handleError.call(that, err, ctx, null, next);
         return;
       }
 
@@ -41,7 +41,7 @@ class SomniOAuth {
 
     return async function (ctx, next) {
       let request = new Request(ctx.request);
-      let response = new Response(ctx.request);
+      let response = new Response(replaceResponse(ctx.response));
       let code;
 
       try {
@@ -49,8 +49,8 @@ class SomniOAuth {
         ctx.state.oauth = {
           code: code
         };
-      } catch (e) {
-        await handleError.call(that, e, ctx, response, next);
+      } catch (err) {
+        await handleError.call(that, err, ctx, response, next);
         return;
       }
 
@@ -67,21 +67,7 @@ class SomniOAuth {
 
     return async function (ctx, next) {
       let request = new Request(ctx.request);
-      // let response = new Response(ctx.response);
-      let newResponse = {
-        headers: {},
-      };
-      let res = ctx.response;
-      for (let property in res) {
-        if (property !== 'headers') {
-          newResponse[property] = res[property];
-        }
-      }
-      for (let field in res.headers) {
-        newResponse.headers[field] = res.headers[field];
-      }
-      newResponse.header = newResponse.headers;
-      let response = new Response(newResponse);
+      let response = new Response(replaceResponse(ctx.response));
 
       let token;
 
@@ -90,8 +76,8 @@ class SomniOAuth {
         ctx.state.oauth = {
           token: token
         };
-      } catch (e) {
-        await handleError.call(that, e, ctx, response, next);
+      } catch (err) {
+        await handleError.call(that, err, ctx, response, next);
         return;
       }
 
@@ -105,9 +91,28 @@ class SomniOAuth {
 }
 
 /**
+ * replace response.
+ */
+function replaceResponse(res) {
+  let newResponse = {
+    headers: {},
+  };
+  for (let property in res) {
+    if (property !== 'headers') {
+      newResponse[property] = res[property];
+    }
+  }
+  for (let field in res.headers) {
+    newResponse.headers[field] = res.headers[field];
+  }
+  newResponse.header = newResponse.headers;
+  return newResponse;
+}
+
+/**
  * Handle response.
  */
-let handleResponse = async function (ctx, response) {
+async function handleResponse(ctx, response) {
   if (response.status === 302) {
     let location = response.headers.location;
     delete response.headers.location;
@@ -123,10 +128,10 @@ let handleResponse = async function (ctx, response) {
 /**
  * Handle error.
  */
-let handleError = async function (e, ctx, response, next) {
+async function handleError(err, ctx, response, next) {
   if (this.useErrorHandler === true) {
     ctx.state.oauth = {
-      error: e
+      error: err
     };
     await next();
   } else {
@@ -134,16 +139,16 @@ let handleError = async function (e, ctx, response, next) {
       ctx.set(response.headers);
     }
 
-    ctx.status = e.code;
+    ctx.status = err.code;
 
-    if (e instanceof UnauthorizedRequestError) {
+    if (err instanceof UnauthorizedRequestError) {
       ctx.body = "";
       return;
     }
 
     ctx.body = {
-      error: e.name,
-      error_description: e.message
+      error: err.name,
+      error_description: err.message
     };
   }
 };
