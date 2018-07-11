@@ -7,6 +7,6 @@ export default {
         path: 'info'
       });
     },
-    student: () => {},
+    student: () => {}
   }
-}
+};

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// import Header from '../../components/Header';
-// import Footer from '../../components/Footer';
-
 class DefaultLayout extends Component {
   constructor(props) {
     super(props);
@@ -11,11 +8,9 @@ class DefaultLayout extends Component {
   render() {
     return (
       <div className="exhibition">
-        {/* <Header /> */}
         {React.cloneElement(this.props.children, {
           account: this.props.data.account
         })}
-        {/* <Footer /> */}
       </div>
     );
   }

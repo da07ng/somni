@@ -1,13 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class Signout extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
-  render() {
-
-  }
+  render() {}
 }
 
-export default Signout
+export default Signout;

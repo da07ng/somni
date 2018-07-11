@@ -9,5 +9,3 @@ const schema = makeExecutableSchema({
 });
 
 export default schema;
-
-

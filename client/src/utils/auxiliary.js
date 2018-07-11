@@ -1,12 +1,21 @@
 function searchParams(params) {
-  return Object.keys(params).map((key) => {
-    return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-  }).join('&')
+  return Object.keys(params)
+    .map(key => {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+    })
+    .join('&');
 }
 
 function formatTime(timestamp) {
   let data = new Date(timestamp);
-  return data.getFullYear() + '年' + (data.getMonth() + 1) + '月' + data.getDate() + '日';
+  return (
+    data.getFullYear() +
+    '年' +
+    (data.getMonth() + 1) +
+    '月' +
+    data.getDate() +
+    '日'
+  );
 }
 
 function subString(str, n) {
@@ -26,7 +35,7 @@ function subString(str, n) {
 function getQueryString(name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
   var r = window.location.search.substr(1).match(reg);
-  if (r !== null){
+  if (r !== null) {
     return unescape(r[2]);
   }
   return null;

@@ -26,11 +26,11 @@ class Header extends Component {
   renderLoggedOut() {
     return (
       <Menu.Menu position="right">
-        <Menu.Item name="signup" as={Link} to="/signup">
-          注册
-        </Menu.Item>
         <Menu.Item name="signin" as={Link} to="/signin">
           登录
+        </Menu.Item>
+        <Menu.Item name="signup" as={Link} to="/signup">
+          注册
         </Menu.Item>
       </Menu.Menu>
     );

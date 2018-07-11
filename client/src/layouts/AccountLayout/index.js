@@ -11,7 +11,7 @@ class AccountLayout extends Component {
   render() {
     return (
       <div className="account">
-        <Header account={this.props.data.account}/>
+        <Header account={this.props.data.account} />
         {React.cloneElement(this.props.children, {
           account: this.props.data.account
         })}

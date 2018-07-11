@@ -39,7 +39,7 @@ export default {
 
       if (user) {
         if (await User.checkPassword(password, user.password)) {
-          return user
+          return user;
         } else {
           throw new Error('error password');
         }

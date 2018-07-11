@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'crypto';
 import { Client } from '../models';
 
 export async function createClient(ctx, next) {

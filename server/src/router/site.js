@@ -3,8 +3,8 @@ import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
 
 import * as accountController from '../controllers/account';
 import * as applicationController from '../controllers/application';
-import * as infoController from '../controllers/info';
-import * as studentController from '../controllers/student';
+// import * as infoController from '../controllers/info';
+// import * as studentController from '../controllers/student';
 
 import schema from '../graphql/schema';
 
@@ -15,15 +15,16 @@ function register(app) {
     .post('/signup', accountController.signup)
     .post('/signin', accountController.signin)
     .post('/signout', accountController.signout)
+
     .get('/client', applicationController.getClient)
     .post('/client', applicationController.createClient)
 
-    .post('/saveinfo', infoController.saveInfo)
-    .get('/info', infoController.fetchInfo)
+    // .post('/saveinfo', infoController.saveInfo)
+    // .get('/info', infoController.fetchInfo)
 
-    .post('/savestudent', studentController.saveStudent)
-    .get('/student', studentController.fetchStudent)
-    .get('/studentDetail', studentController.fetchStudentDetail)
+    // .post('/savestudent', studentController.saveStudent)
+    // .get('/student', studentController.fetchStudent)
+    // .get('/studentDetail', studentController.fetchStudentDetail)
 
     .get('/graphiql', graphiqlKoa({
         endpointURL: '/graphql'

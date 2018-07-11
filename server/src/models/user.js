@@ -64,13 +64,13 @@ UserSchema.statics.findById = function (id) {
 
 UserSchema.statics.findByUsername = function (username) {
   return this.findOne({
-    username: username
+    username: { $regex: username, $options: 'i' }
   });
 };
 
 UserSchema.statics.findByEmail = function (email) {
   return this.findOne({
-    email: email
+    email: { $regex: email, $options: 'i' }
   });
 };
 
