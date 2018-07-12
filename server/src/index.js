@@ -7,6 +7,11 @@ import session from 'koa-session';
 import views from 'koa-views';
 import path from 'path';
 
+import { ApolloServer } from 'apollo-server-koa';
+// import schema from './graphql/schema';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
+
 import config from '../config';
 
 import { connectToMongoDB } from './database/mongodb';
@@ -32,6 +37,16 @@ app.use(
 oauthRegister(app);
 siteRegister(app);
 apiRegister(app);
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ ctx, next }) => ({
+    token: ctx.request.headers['authorization']
+  })
+});
+
+server.applyMiddleware({ app });
 
 app.listen(config.port, () => {
   console.log(`Listening on port ${config.port}`);

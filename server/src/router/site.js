@@ -1,12 +1,10 @@
 import Router from 'koa-router';
-import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
+// import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
 
 import * as accountController from '../controllers/account';
 import * as applicationController from '../controllers/application';
-// import * as infoController from '../controllers/info';
-// import * as studentController from '../controllers/student';
 
-import schema from '../graphql/schema';
+// import schema from '../graphql/schema';
 
 function register(app) {
   const router = new Router();
@@ -17,27 +15,25 @@ function register(app) {
     .post('/signout', accountController.signout)
 
     .get('/client', applicationController.getClient)
-    .post('/client', applicationController.createClient)
+    .post('/client', applicationController.createClient);
 
-    // .post('/saveinfo', infoController.saveInfo)
-    // .get('/info', infoController.fetchInfo)
-
-    // .post('/savestudent', studentController.saveStudent)
-    // .get('/student', studentController.fetchStudent)
-    // .get('/studentDetail', studentController.fetchStudentDetail)
-
-    .get('/graphiql', graphiqlKoa({
-        endpointURL: '/graphql'
-      })
-    )
-    .get('/graphql', graphqlKoa({
-        schema: schema
-      })
-    )
-    .post('/graphql', graphqlKoa({
-        schema: schema
-      })
-    );
+  // .get(
+  //   '/graphiql',
+  //   graphiqlKoa({
+  //     endpointURL: '/graphql'
+  //   })
+  // )
+  // .get('/graphql', graphqlKoa({
+  //     schema: schema
+  //   })
+  // )
+  // .post('/graphql', graphqlKoa((ctx, next) => ({
+  //     schema: schema,
+  //     context: {
+  //       token: ctx.request.headers['authorization']
+  //     }
+  //   }))
+  // );
 
   app.use(router.routes());
   app.use(router.allowedMethods());

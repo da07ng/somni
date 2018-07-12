@@ -10,7 +10,7 @@ export default {
     }
   },
   Mutation: {
-    async signup(_, { username, email, password }) {
+    async signup(_, { username, email, password }, context, info) {
       const user = new User({ username, email, password });
 
       try {
@@ -29,7 +29,8 @@ export default {
         }
       }
     },
-    async signin(_, { account, password }) {
+    async signin(_, { account, password }, context, info) {
+      console.log(context);
       let user;
       if (account.indexOf('@') > -1) {
         user = await User.findByEmail(account);
