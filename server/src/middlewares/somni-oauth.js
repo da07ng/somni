@@ -28,7 +28,8 @@ class SomniOAuth {
           token: token
         };
       } catch (err) {
-        await handleError.call(that, err, ctx, null, next);
+        console.log(err);
+        handleError.call(that, err, ctx, null, next);
         return;
       }
 
@@ -50,7 +51,7 @@ class SomniOAuth {
           code: code
         };
       } catch (err) {
-        await handleError.call(that, err, ctx, response, next);
+        handleError.call(that, err, ctx, response, next);
         return;
       }
 
@@ -58,7 +59,7 @@ class SomniOAuth {
         await next();
       }
 
-      await handleResponse.call(that, ctx, response);
+      handleResponse.call(that, ctx, response);
     };
   }
 
@@ -77,7 +78,7 @@ class SomniOAuth {
           token: token
         };
       } catch (err) {
-        await handleError.call(that, err, ctx, response, next);
+        handleError.call(that, err, ctx, response, next);
         return;
       }
 
@@ -85,7 +86,7 @@ class SomniOAuth {
         await next();
       }
 
-      await handleResponse.call(that, ctx, response);
+      handleResponse.call(that, ctx, response);
     };
   }
 }
@@ -95,7 +96,7 @@ class SomniOAuth {
  */
 function replaceResponse(res) {
   let newResponse = {
-    headers: {},
+    headers: {}
   };
   for (let property in res) {
     if (property !== 'headers') {
@@ -112,45 +113,32 @@ function replaceResponse(res) {
 /**
  * Handle response.
  */
-async function handleResponse(ctx, response) {
-  if (response.status === 302) {
-    let location = response.headers.location;
-    delete response.headers.location;
-    ctx.set(response.headers);
-    ctx.redirect(location);
-  } else {
-    ctx.set(response.headers);
-    ctx.status = response.status;
-    ctx.body = response.body;
-  }
-};
+function handleResponse(ctx, response) {
+  ctx.body = response.body;
+  ctx.status = response.status;
+
+  ctx.set(response.headers);
+}
 
 /**
  * Handle error.
  */
-async function handleError(err, ctx, response, next) {
-  if (this.useErrorHandler === true) {
-    ctx.state.oauth = {
-      error: err
-    };
-    await next();
-  } else {
-    if (response) {
-      ctx.set(response.headers);
-    }
-
-    ctx.status = err.code;
-
-    if (err instanceof UnauthorizedRequestError) {
-      ctx.body = "";
-      return;
-    }
-
-    ctx.body = {
-      error: err.name,
-      error_description: err.message
-    };
+function handleError(err, ctx, response, next) {
+  if (response) {
+    ctx.set(response.headers);
   }
-};
+
+  ctx.status = err.code;
+
+  if (err instanceof UnauthorizedRequestError) {
+    ctx.body = 'Unauthorized';
+    return;
+  }
+
+  ctx.body = {
+    error: err.name,
+    error_description: err.message
+  };
+}
 
 export default SomniOAuth;
