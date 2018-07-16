@@ -8,9 +8,7 @@ import views from 'koa-views';
 import path from 'path';
 
 import { ApolloServer } from 'apollo-server-koa';
-// import schema from './graphql/schema';
-import typeDefs from './graphql/typeDefs';
-import resolvers from './graphql/resolvers';
+import schema from './graphql/schema';
 
 import config from '../config';
 
@@ -39,8 +37,7 @@ siteRegister(app);
 apiRegister(app);
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  ...schema,
   context: ({ ctx, next }) => ({
     token: ctx.request.headers['authorization']
   })
