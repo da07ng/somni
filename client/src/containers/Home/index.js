@@ -166,12 +166,18 @@ class DesktopContainer extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item as="a" active>
+                <Menu.Item as={Link} to="/" active>
                   Home
                 </Menu.Item>
-                <Menu.Item as="a">Work</Menu.Item>
-                <Menu.Item as="a">Company</Menu.Item>
-                <Menu.Item as="a">Careers</Menu.Item>
+                <Menu.Item as={Link} to="/blog">
+                  Work
+                </Menu.Item>
+                <Menu.Item as={Link} to="/blog">
+                  Company
+                </Menu.Item>
+                <Menu.Item as={Link} to="/blog">
+                  Careers
+                </Menu.Item>
 
                 {this.props.account.loggedIn
                   ? this.renderLoggedIn()
@@ -228,11 +234,21 @@ class MobileContainer extends Component {
             <Menu.Item as="a" active>
               Home
             </Menu.Item>
-            <Menu.Item as="a">Work</Menu.Item>
-            <Menu.Item as="a">Company</Menu.Item>
-            <Menu.Item as="a">Careers</Menu.Item>
-            <Menu.Item as="a">Log in</Menu.Item>
-            <Menu.Item as="a">Sign Up</Menu.Item>
+            <Menu.Item as={Link} to="/blog">
+              Work
+            </Menu.Item>
+            <Menu.Item as={Link} to="/blog">
+              Company
+            </Menu.Item>
+            <Menu.Item as={Link} to="/blog">
+              Careers
+            </Menu.Item>
+            <Menu.Item as={Link} to="/signin">
+              Log in
+            </Menu.Item>
+            <Menu.Item as={Link} to="/signup">
+              Sign Up
+            </Menu.Item>
           </Sidebar>
 
           <Sidebar.Pusher

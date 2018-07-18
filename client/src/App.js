@@ -5,11 +5,12 @@ import { graphql } from 'react-apollo';
 
 import DefaultLayout from './layouts/DefaultLayout';
 import AccountLayout from './layouts/AccountLayout';
-// import WorkbenchLayout from './layouts/WorkbenchLayout';
+import WorkbenchLayout from './layouts/WorkbenchLayout';
 
 import Home from './containers/Home';
 import Signup from './containers/Signup';
 import Signin from './containers/Signin';
+import Blog from './containers/Blog';
 import NotFound from './containers/NotFound';
 
 import './styles/globalStyles';
@@ -50,6 +51,12 @@ class App extends Component {
             <AccountLayout data={this.props.data}>
               <Signin />
             </AccountLayout>
+          )}
+        />
+        <Route path="/blog" render={() => (
+            <WorkbenchLayout data={this.props.data}>
+              <Blog />
+            </WorkbenchLayout>
           )}
         />
         <Route component={NotFound} />
