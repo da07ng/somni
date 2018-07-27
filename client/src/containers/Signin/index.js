@@ -28,8 +28,6 @@ class Signin extends Component {
     const account = this.accountInputRef.current.value;
     const password = this.passwordInputRef.current.value;
 
-    console.log(account, password);
-
     try {
       const result = await signin({
         variables: { account: account, password: password }
@@ -71,19 +69,19 @@ class Signin extends Component {
                       }}
                     >
                       <Form.Field>
-                        <label>Account</label>
+                        <label>帐户</label>
                         <input
                           type="text"
                           name="account"
                           ref={this.accountInputRef}
-                          placeholder="Email or Username"
+                          placeholder="Username or Email"
                         />
                       </Form.Field>
                       <Form.Field>
-                        <label>Password</label>
+                        <label>密码</label>
                         <input
                           type="password"
-                          name="account"
+                          name="password"
                           ref={this.passwordInputRef}
                           placeholder="Password"
                         />

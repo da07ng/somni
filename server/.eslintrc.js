@@ -19,6 +19,7 @@ module.exports = {
   },
   // add your custom rules here
   rules: {
+    semi: ['error', 'always'],
     'space-before-function-paren': [
       'error',
       {

@@ -70,7 +70,7 @@ class Signup extends Component {
                     }}
                   >
                     <Form.Field>
-                      <label>Username</label>
+                      <label>用户名</label>
                       <input
                         type="text"
                         name="username"
@@ -79,7 +79,7 @@ class Signup extends Component {
                       />
                     </Form.Field>
                     <Form.Field>
-                      <label>Email</label>
+                      <label>邮箱</label>
                       <input
                         type="email"
                         name="email"
@@ -88,10 +88,10 @@ class Signup extends Component {
                       />
                     </Form.Field>
                     <Form.Field>
-                      <label>Password</label>
+                      <label>密码</label>
                       <input
                         type="password"
-                        name="account"
+                        name="password"
                         ref={this.passwordInputRef}
                         placeholder="Password"
                       />

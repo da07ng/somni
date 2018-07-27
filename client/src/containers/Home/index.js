@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
   Button,
@@ -21,6 +20,8 @@ import {
   Visibility
 } from 'semantic-ui-react';
 
+import * as styled from './style';
+
 const query = gql`
   {
     ui @client {
@@ -29,26 +30,9 @@ const query = gql`
   }
 `;
 
-const StyledHeaderH1 = styled(Header)`
-  &&& {
-    font-size: ${props => (props.mobile ? '2em' : '4em')};
-    font-weight: normal;
-    margin-bottom: 0;
-    margin-top: ${props => (props.mobile ? '1.5em' : '3em')};
-  }
-`;
-
-const StyledHeaderH2 = styled(Header)`
-  &&& {
-    font-size: ${props => (props.mobile ? '1.5em' : '1.7em')};
-    font-weight: normal;
-    margin-top: ${props => (props.mobile ? '0.5em' : '1.5em')};
-  }
-`;
-
 const HomepageHeading = ({ mobile }) => (
   <Container text>
-    <StyledHeaderH1
+    <styled.HeaderH1
       mobile={mobile ? 1 : 0}
       as="h1"
       content="Imagine-a-Company"
@@ -60,7 +44,7 @@ const HomepageHeading = ({ mobile }) => (
       //   marginTop: mobile ? '1.5em' : '3em'
       // }}
     />
-    <StyledHeaderH2
+    <styled.HeaderH2
       mobile={mobile ? 1 : 0}
       as="h2"
       content="Do whatever you want when you want to."
@@ -304,10 +288,6 @@ ResponsiveContainer.propTypes = {
 };
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <ResponsiveContainer account={this.props.account}>

@@ -11,10 +11,6 @@ const StyledButton = styled(Button)`
 `;
 
 class Footer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div id="footer" className={style.footer}>

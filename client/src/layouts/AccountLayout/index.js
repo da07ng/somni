@@ -4,10 +4,6 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 class AccountLayout extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="account">

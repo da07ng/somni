@@ -5,10 +5,6 @@ import { Menu, Container, Dropdown } from 'semantic-ui-react';
 // import style from './style';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderLoggedIn() {
     return (
       <Menu.Menu position="right">
