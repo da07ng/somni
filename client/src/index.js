@@ -11,6 +11,7 @@ import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
 import merge from 'lodash.merge';
 
+import config from './config';
 import localState from './localState';
 
 import './assets/css/semantic.min.css';
@@ -21,7 +22,7 @@ import registerServiceWorker from './utils/registerServiceWorker';
 const cache = new InMemoryCache();
 
 const link = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: config.api.graphqlUrl,
   credentials: 'same-origin'
 });
 
