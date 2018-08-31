@@ -19,7 +19,7 @@
   "homepage": "https://github.com/da07ng/somni#readme",
   "dependencies": {
     "@koa/cors": "^2.2.1",
-    "apollo-server-koa": "^2.0.0-rc.7",
+    "apollo-server-koa": "^2.0.4",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
