@@ -46,4 +46,4 @@ export {
   formatTime,
   subString,
   getQueryString
-}
+};

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-import style from './style';
+// import style from './style';
 
 const StyledButton = styled(Button)`
   &&& {
@@ -13,8 +13,8 @@ const StyledButton = styled(Button)`
 class Footer extends Component {
   render() {
     return (
-      <div id="footer" className={style.footer}>
-        <div className="container">
+      <div id="footer">
+        <div className="ui container">
           <a href="/" className="">
             InfoVis
           </a>
