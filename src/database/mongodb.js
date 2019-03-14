@@ -13,6 +13,7 @@ const connectToMongoDB = async () => {
   try {
     await mongoose.connect(`mongodb://${host}:${port}/${name}`, {
       useNewUrlParser: true,
+      useCreateIndex: true,
       poolSize: 20
     });
 
