@@ -1,12 +1,14 @@
 import { User } from '../models';
+import userService from '../services/user';
 
 export async function signup(ctx, next) {
-  const user = new User(ctx.request.body);
+  // const user = new User(ctx.request.body);
+  let params = ctx.request.body;
 
   try {
-    await user.save();
+    let result = await userService.create(params);
     ctx.body = {
-      id: user._id
+      id: result.id
     };
   } catch (err) {
     console.log('signup - Err: ', err);

@@ -12,13 +12,15 @@ import schema from './graphql/schema';
 
 import config from '../config';
 
-import { connectToMongoDB } from './database/mongodb';
+// import { connectToMongoDB } from './database/mongodb';
 
-import oauthRegister from './router/oauth';
+// import oauthRegister from './router/oauth';
 import siteRegister from './router/site';
-import apiRegister from './router/api';
+// import apiRegister from './router/api';
 
-connectToMongoDB();
+import sequelize from './database/postgresql';
+
+// connectToMongoDB();
 
 const app = new Koa();
 app.keys = ['some secret hurr'];
@@ -32,9 +34,11 @@ app.use(
   })
 );
 
-oauthRegister(app);
+// oauthRegister(app);
 siteRegister(app);
-apiRegister(app);
+// apiRegister(app);
+
+sequelize.sync();
 
 const server = new ApolloServer({
   ...schema,

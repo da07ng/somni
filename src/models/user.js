@@ -1,88 +1,65 @@
-import mongoose from 'mongoose';
+import { Model, DataTypes } from 'sequelize';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 // import argon2 from 'argon2';
+import nanoid from 'nanoid';
 
-const Schema = mongoose.Schema;
+import sequelize from '../database/postgresql';
 
-const UserSchema = new Schema({
-  username: {
-    type: String,
-    index: {
-      unique: true,
-      dropDups: true
-    }
-  },
-  email: {
-    type: String,
-    index: {
-      unique: true,
-      dropDups: true
-    }
-  },
-  password: {
-    type: String
-  },
-  scope: {
-    type: String
-  },
-  roles: {
-    type: Array,
-    default: []
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-UserSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+class User extends Model {
+  static async generatePasswordHash(password) {
     let shasum = crypto.createHash('sha256');
-    shasum.update(this.password);
+    shasum.update(password);
 
-    const saltRounds = 10;
-    const hashPassword = await bcrypt.hash(shasum.digest('hex'), saltRounds);
+    let saltRounds = 10;
+    let hashPassword = await bcrypt.hash(shasum.digest('hex'), saltRounds);
 
-    this.password = hashPassword;
+    return hashPassword;
   }
+}
 
-  if (this.isNew) {
-    this.created = this.updated = Date.now();
-  } else {
-    this.updated = Date.now();
+User.init(
+  {
+    id: {
+      type: DataTypes.STRING(22),
+      allowNull: false,
+      primaryKey: true,
+      defaultValue: nanoid(22)
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: '用户名已存在'
+      }
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: '邮箱已存在'
+      },
+      validate: {
+        isEmail: true
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_id'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: 'updated_id'
+    }
+  },
+  {
+    tableName: 'users',
+    sequelize
   }
-
-  next();
-});
-
-UserSchema.statics.findById = function (id) {
-  return this.findById(id);
-};
-
-UserSchema.statics.findByUsername = function (username) {
-  return this.findOne({
-    username: { $regex: username, $options: 'i' }
-  });
-};
-
-UserSchema.statics.findByEmail = function (email) {
-  return this.findOne({
-    email: { $regex: email, $options: 'i' }
-  });
-};
-
-UserSchema.statics.checkPassword = function (password, hash) {
-  let shasum = crypto.createHash('sha256');
-  shasum.update(password);
-
-  return bcrypt.compare(shasum.digest('hex'), hash);
-};
-
-const User = mongoose.model('User', UserSchema);
+);
 
 export default User;
