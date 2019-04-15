@@ -1,5 +1,7 @@
-import { User } from '../models';
+import models from '../models';
 import userService from '../services/user';
+
+const User = models.User;
 
 export async function signup(ctx, next) {
   // const user = new User(ctx.request.body);

@@ -14,7 +14,7 @@ import config from '../config';
 
 // import { connectToMongoDB } from './database/mongodb';
 
-// import oauthRegister from './router/oauth';
+import oauthRegister from './router/oauth';
 import siteRegister from './router/site';
 // import apiRegister from './router/api';
 
@@ -34,10 +34,11 @@ app.use(
   })
 );
 
-// oauthRegister(app);
+oauthRegister(app);
 siteRegister(app);
 // apiRegister(app);
 
+// sequelize.sync({force: true});
 sequelize.sync();
 
 const server = new ApolloServer({

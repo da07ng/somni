@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 
 import SomniOAuth from '../middlewares/somni-oauth';
-import * as OAuthModel from '../models/oauth';
+import * as OAuthModel from '../services/oauth';
 import * as oauthController from '../controllers/oauth';
 
 function register(app) {

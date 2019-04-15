@@ -16,6 +16,19 @@ class User extends Model {
 
     return hashPassword;
   }
+
+  static async findByUsername(username) {
+    return User.findOne({
+      where: { username: username }
+    });
+  }
+
+  static async checkPassword(password, hashPassword) {
+    let shasum = crypto.createHash('sha256');
+    shasum.update(password);
+
+    return bcrypt.compare(shasum.digest('hex'), hashPassword);
+  }
 }
 
 User.init(
