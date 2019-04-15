@@ -55,7 +55,7 @@ export function authenticateHandler() {
       // in this example, we store the logged-in user as the 'loginUser' attribute in session
       if (request.ctx.session.loginUser) {
         return {
-          _id: request.ctx.session.loginUser.userid,
+          id: request.ctx.session.loginUser.userid,
           username: request.ctx.session.loginUser.username
         };
       }

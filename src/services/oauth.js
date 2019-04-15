@@ -51,8 +51,8 @@ async function getAccessToken(token) {
       accessToken: accessToken.access_token,
       accessTokenExpiresAt: accessToken.expires,
       scope: accessToken.scope,
-      user: accessToken.user,
-      client: accessToken.client
+      user_id: accessToken.user,
+      client_id: accessToken.client
     };
 
     return tempToken;
@@ -82,8 +82,8 @@ async function getRefreshToken(token) {
       refreshTokenExpiresAt: token ? new Date(refreshToken.expires) : null,
       refreshToken: token,
       scope: refreshToken.scope,
-      user: refreshToken.user,
-      client: refreshToken.client
+      user_id: refreshToken.user,
+      client_id: refreshToken.client
     };
 
     return tempToken;
@@ -114,8 +114,8 @@ async function getAuthorizationCode(code) {
       expiresAt: authorizationCode.expires,
       redirectUri: authorizationCode.redirect_uri,
       scope: authorizationCode.scope,
-      user: authorizationCode.User,
-      client: authorizationCode.Client
+      user_id: authorizationCode.User,
+      client_id: authorizationCode.Client
     };
 
     return tempCode;
@@ -147,7 +147,7 @@ async function getClient(clientId, clientSecret) {
     }
 
     let tempClient = {
-      _id: client._id,
+      id: client.id,
       redirectUris: client.redirect_uris,
       grants: client.grant_types
     };
@@ -164,8 +164,6 @@ async function getClient(clientId, clientSecret) {
     delete clientWithGrants.redirect_uri;
     // clientWithGrants.refreshTokenLifetime = integer optional;
     // clientWithGrants.accessTokenLifetime  = integer optional;
-    return clientWithGrants;
-
     return clientWithGrants;
   } catch (err) {
     console.log('getClient - Err: ', err);
@@ -232,8 +230,8 @@ async function saveToken(token, client, user) {
       access_token: token.accessToken,
       expires: token.accessTokenExpiresAt,
       scope: token.scope,
-      user: user._id,
-      client: client._id
+      user_id: user.id,
+      client_id: client.id
     });
 
     if (token.refreshToken) {
@@ -241,19 +239,19 @@ async function saveToken(token, client, user) {
       let refreshToken = await RefreshToken.create({
         refresh_token: token.refreshToken,
         expires: token.refreshTokenExpiresAt,
-        client: client._id,
-        user: user._id,
+        client_id: client.id,
+        user_id: user.id,
         scope: token.scope
       });
     }
 
     let playload = {
       iss: config.jwt.iss,
-      sub: user._id.toString(),
-      aud: client._id.toString(),
+      sub: user.id,
+      aud: client.id,
       exp: Date.parse(token.accessTokenExpiresAt) / 1000,
       user: {
-        id: user._id.toString(),
+        id: user.id,
         username: user.username
       }
     };
@@ -290,8 +288,8 @@ async function saveAuthorizationCode(code, client, user) {
       expires: code.expiresAt,
       redirect_uri: code.redirectUri,
       scope: code.scope,
-      user: user._id,
-      client: client._id
+      user_id: user.id,
+      client_id: client.id
     });
 
     let tempCode = {
@@ -299,8 +297,8 @@ async function saveAuthorizationCode(code, client, user) {
       expires_in: Math.floor((code.expiresAt - new Date()) / 1000),
       redirectUri: code.redirectUri,
       scope: code.scope,
-      user: user._id,
-      client: client._id
+      user_id: user.id,
+      client_id: client.id
     };
 
     return tempCode;

@@ -1,11 +1,11 @@
 import { Model, DataTypes } from 'sequelize';
 import nanoid from 'nanoid';
 
-import sequelize from '../../database/postgresql';
+import sequelize from '../database/postgresql';
 
-class Scope extends Model {}
+class Manuscript extends Model {}
 
-Scope.init(
+Manuscript.init(
   {
     id: {
       type: DataTypes.STRING(18),
@@ -15,8 +15,15 @@ Scope.init(
         return nanoid(18);
       }
     },
-    scope: DataTypes.STRING,
-    is_default: DataTypes.BOOLEAN,
+    title: {
+      type: DataTypes.STRING
+    },
+    content: {
+      type: DataTypes.STRING
+    },
+    author: {
+      type: DataTypes.STRING
+    },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at'
@@ -27,9 +34,9 @@ Scope.init(
     }
   },
   {
-    tableName: 'oauth_scopes',
+    tableName: 'comments',
     sequelize
   }
 );
 
-export default Scope;
+export default Manuscript;

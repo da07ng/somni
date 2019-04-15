@@ -7,22 +7,6 @@ import nanoid from 'nanoid';
 import sequelize from '../database/postgresql';
 
 class User extends Model {
-  static async generatePasswordHash(password) {
-    let shasum = crypto.createHash('sha256');
-    shasum.update(password);
-
-    let saltRounds = 10;
-    let hashPassword = await bcrypt.hash(shasum.digest('hex'), saltRounds);
-
-    return hashPassword;
-  }
-
-  static async findByUsername(username) {
-    return User.findOne({
-      where: { username: username }
-    });
-  }
-
   static async checkPassword(password, hashPassword) {
     let shasum = crypto.createHash('sha256');
     shasum.update(password);
@@ -34,10 +18,12 @@ class User extends Model {
 User.init(
   {
     id: {
-      type: DataTypes.STRING(22),
+      type: DataTypes.STRING(18),
       allowNull: false,
       primaryKey: true,
-      defaultValue: nanoid(22)
+      defaultValue: function () {
+        return nanoid(18);
+      }
     },
     username: {
       type: DataTypes.STRING,
@@ -62,11 +48,11 @@ User.init(
     },
     createdAt: {
       type: DataTypes.DATE,
-      field: 'created_id'
+      field: 'created_at'
     },
     updatedAt: {
       type: DataTypes.DATE,
-      field: 'updated_id'
+      field: 'updated_at'
     }
   },
   {
@@ -74,5 +60,15 @@ User.init(
     sequelize
   }
 );
+
+User.beforeCreate(async (user, options) => {
+  let shasum = crypto.createHash('sha256');
+  shasum.update(user.password);
+
+  let saltRounds = 10;
+  let hashPassword = await bcrypt.hash(shasum.digest('hex'), saltRounds);
+
+  user.password = hashPassword;
+});
 
 export default User;

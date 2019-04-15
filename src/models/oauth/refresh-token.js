@@ -11,10 +11,12 @@ class RefreshToken extends Model {}
 RefreshToken.init(
   {
     id: {
-      type: DataTypes.STRING(22),
+      type: DataTypes.STRING(18),
       allowNull: false,
       primaryKey: true,
-      defaultValue: nanoid(22)
+      defaultValue: function () {
+        return nanoid(18);
+      }
     },
     refresh_token: {
       type: DataTypes.STRING,
@@ -24,11 +26,11 @@ RefreshToken.init(
     scope: DataTypes.STRING,
     createdAt: {
       type: DataTypes.DATE,
-      field: 'created_id'
+      field: 'created_at'
     },
     updatedAt: {
       type: DataTypes.DATE,
-      field: 'updated_id'
+      field: 'updated_at'
     }
   },
   {

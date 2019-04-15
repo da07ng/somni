@@ -1,25 +1,23 @@
-import crypto from 'crypto';
-import { Client } from '../models';
+import applicationService from '../services/application';
 
-export async function createClient(ctx, next) {
-  const client = new Client(ctx.request.body);
-  client.client_id = crypto
-    .createHash('md5')
-    .update(crypto.randomBytes(16))
-    .digest('hex'); // 32 chars
-  client.client_secret = crypto
-    .createHash('sha256')
-    .update(crypto.randomBytes(32))
-    .digest('hex'); // 64 chars
-  client.scope = 'profile';
+class AppController {
+  async createClient(ctx, next) {
+    let params = ctx.request.body;
 
-  await client.save();
-  ctx.body = {
-    id: client
-  };
+    try {
+      let result = await applicationService.create(params);
+      ctx.body = {
+        id: result.id
+      };
+    } catch (err) {
+      console.log('signup - Err: ', err);
+    }
+  }
+
+  async getClient(ctx, next) {
+    // const client = await Client.findOne({ name: ctx.request.name });
+    // ctx.body = client;
+  }
 }
 
-export async function getClient(ctx, next) {
-  const client = await Client.findOne({ name: ctx.request.name });
-  ctx.body = client;
-}
+export default new AppController();
