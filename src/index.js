@@ -12,8 +12,6 @@ import schema from './graphql/schema';
 
 import config from '../config';
 
-// import { connectToMongoDB } from './database/mongodb';
-
 import oauthRegister from './router/oauth';
 import siteRegister from './router/site';
 // import apiRegister from './router/api';

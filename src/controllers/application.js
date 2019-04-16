@@ -1,6 +1,6 @@
 import applicationService from '../services/application';
 
-class AppController {
+class ApplicationController {
   async createClient(ctx, next) {
     let params = ctx.request.body;
 
@@ -20,4 +20,4 @@ class AppController {
   }
 }
 
-export default new AppController();
+export default new ApplicationController();

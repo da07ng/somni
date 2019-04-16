@@ -1,18 +1,18 @@
 import Router from 'koa-router';
 
-import userController from '../controllers/user';
-import appController from '../controllers/application';
+import user from '../controllers/user';
+import application from '../controllers/application';
 
 function register(app) {
   const router = new Router();
 
   router
-    .post('/signup', userController.signup)
-    .post('/signin', userController.signin)
-    .post('/signout', userController.signout)
+    .post('/signup', user.signup)
+    .post('/signin', user.signin)
+    .post('/signout', user.signout)
 
-    .get('/client', appController.getClient)
-    .post('/client', appController.createClient);
+    .get('/client', application.getClient)
+    .post('/client', application.createClient);
 
   app.use(router.routes());
   app.use(router.allowedMethods());

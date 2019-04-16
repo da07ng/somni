@@ -8,11 +8,11 @@ class Reply extends Model {}
 Reply.init(
   {
     id: {
-      type: DataTypes.STRING(18),
+      type: DataTypes.STRING(19),
       allowNull: false,
       primaryKey: true,
       defaultValue: function () {
-        return nanoid(18);
+        return nanoid(19);
       }
     },
     content: {
