@@ -92,7 +92,7 @@ async function getAuthorizationCode(authorizationCode) {
     }
 
     let data = {
-      code: authorizationCode,
+      authorizationCode: authorizationCode,
       expiresAt: result.expires,
       redirectUri: result.redirect_uri,
       scope: result.scope,
@@ -261,8 +261,6 @@ async function saveToken(token, client, user) {
  * Save authorization code.
  */
 async function saveAuthorizationCode(code, client, user) {
-  console.log('saveAuthorizationCode', code, client, user);
-
   try {
     let authorizationCode = await AuthorizationCode.create({
       authorization_code: code.authorizationCode,
@@ -317,7 +315,7 @@ async function revokeToken(token) {
 async function revokeAuthorizationCode(code) {
   try {
     let authorizationCode = await AuthorizationCode.findOne({
-      where: { authorization_code: code.code }
+      where: { authorization_code: code.authorizationCode }
     });
 
     if (authorizationCode) {
@@ -334,35 +332,50 @@ async function revokeAuthorizationCode(code) {
  * Validate scope.
  */
 async function validateScope(user, client, scope) {
-  // console.log('validateScope', user, client, scope);
-  // return (user.scope === scope && client.scope === scope && scope !== null) ? scope: false;
-  return '*';
+  let requestedScopes = scope.split(',');
+  let result = await Scope.findAll({
+    attributes: ['scope']
+  });
+
+  let validateScopes = [];
+  for (const item of result) {
+    validateScopes.push(item.scope);
+  }
+
+  if (!requestedScopes.every(s => validateScopes.indexOf(s) >= 0)) {
+    return false;
+  }
+
+  return scope;
 }
 
 /**
  * Verify scope.
  */
 async function verifyScope(accessToken, scope) {
-  // console.log('verifyScope', accessToken, scope);
-  // return accessToken.scope === scope;
-
   if (!accessToken.scope) {
     return false;
   }
-  let requestedScopes = scope.split(',');
+
   let authorizedScopes = accessToken.scope.split(',');
+  let result = await Scope.findAll({
+    attributes: ['scope']
+  });
 
-  return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
+  let validateScopes = [];
+  for (const item of result) {
+    validateScopes.push(item.scope);
+  }
 
-  // return true;
+  return authorizedScopes.every(s => validateScopes.indexOf(s) >= 0);
 }
 
 export {
-  AccessToken,
-  AuthorizationCode,
-  Client,
-  RefreshToken,
-  Scope,
+  // AccessToken,
+  // AuthorizationCode,
+  // Client,
+  // RefreshToken,
+  // Scope,
   // generateAccessToken,
   // generateRefreshToken,
   getAccessToken,
