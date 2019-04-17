@@ -8,11 +8,10 @@ function register(app) {
     prefix: '/api'
   });
 
-  router
-    .get('/user', app.oauth.authenticate(), userController.getUser)
+  router.get('/user', app.oauth.authenticate(), userController.getUser);
 
-    .get('/article', articleController.fetchArticle)
-    .post('/savearticle', articleController.saveArticle);
+  // .get('/article', articleController.fetchArticle)
+  // .post('/savearticle', articleController.saveArticle);
 
   app.use(router.routes());
   app.use(router.allowedMethods());

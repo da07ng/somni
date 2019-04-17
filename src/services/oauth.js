@@ -21,41 +21,27 @@ const User = models.User;
 /**
  * Get access token.
  */
-async function getAccessToken(token) {
-  console.log('getAccessToken', token);
-
+async function getAccessToken(accessToken) {
   try {
-    let accessToken = await AccessToken.findOne({
-      where: { access_token: token },
-      attributes: [
-        ['access_token', 'accessToken'],
-        ['expires', 'accessTokenExpiresAt'],
-        'scope'
-      ],
-      include: [
-        {
-          model: User,
-          attributes: ['id', 'username']
-        },
-        Client
-      ]
+    let result = await AccessToken.findOne({
+      where: { access_token: accessToken },
+      attributes: ['access_token', 'expires', 'scope'],
+      include: [User, Client]
     });
 
-    console.log('accessToken', accessToken);
-
-    if (!accessToken) {
+    if (!result) {
       return false;
     }
 
-    let tempToken = {
-      accessToken: accessToken.access_token,
-      accessTokenExpiresAt: accessToken.expires,
-      scope: accessToken.scope,
-      user_id: accessToken.user,
-      client_id: accessToken.client
+    let data = {
+      accessToken: result.access_token,
+      accessTokenExpiresAt: result.expires,
+      scope: result.scope,
+      client: result.Client,
+      user: result.User
     };
 
-    return tempToken;
+    return data;
   } catch (err) {
     console.log('getAccessToken - Err: ', err);
   }
@@ -64,29 +50,27 @@ async function getAccessToken(token) {
 /**
  * Get refresh token.
  */
-async function getRefreshToken(token) {
-  console.log('getRefreshToken', token);
-
+async function getRefreshToken(refreshToken) {
   try {
-    let refreshToken = await RefreshToken.findOne({
-      where: { refresh_token: token },
-      attributes: ['client_id', 'user_id', 'expires'],
+    let result = await RefreshToken.findOne({
+      where: { refresh_token: refreshToken },
+      attributes: ['expires', 'scope'],
       include: [User, Client]
     });
 
-    if (!refreshToken) {
+    if (!result) {
       return false;
     }
 
-    let tempToken = {
-      refreshTokenExpiresAt: token ? new Date(refreshToken.expires) : null,
-      refreshToken: token,
-      scope: refreshToken.scope,
-      user_id: refreshToken.user,
-      client_id: refreshToken.client
+    let data = {
+      refreshToken: refreshToken,
+      refreshTokenExpiresAt: refreshToken ? new Date(result.expires) : null,
+      scope: result.scope,
+      client: result.Client,
+      user: result.User
     };
 
-    return tempToken;
+    return data;
   } catch (err) {
     console.log('getRefreshToken - Err: ', err);
   }
@@ -95,30 +79,28 @@ async function getRefreshToken(token) {
 /**
  * Get authorization code.
  */
-async function getAuthorizationCode(code) {
-  console.log('getAuthorizationCode', code);
-
+async function getAuthorizationCode(authorizationCode) {
   try {
-    let authorizationCode = await AuthorizationCode.findOne({
-      where: { authorization_code: code },
-      attributes: ['client_id', 'expires', 'user_id', 'scope'],
+    let result = await AuthorizationCode.findOne({
+      where: { authorization_code: authorizationCode },
+      attributes: ['expires', 'redirect_uri', 'scope'],
       include: [User, Client]
     });
 
-    if (!authorizationCode) {
+    if (!result) {
       return false;
     }
 
-    let tempCode = {
-      code: code,
-      expiresAt: authorizationCode.expires,
-      redirectUri: authorizationCode.redirect_uri,
-      scope: authorizationCode.scope,
-      user_id: authorizationCode.User,
-      client_id: authorizationCode.Client
+    let data = {
+      code: authorizationCode,
+      expiresAt: result.expires,
+      redirectUri: result.redirect_uri,
+      scope: result.scope,
+      client: result.Client,
+      user: result.User
     };
 
-    return tempCode;
+    return data;
   } catch (err) {
     console.log('getAuthorizationCode - Err: ', err);
   }
@@ -128,43 +110,34 @@ async function getAuthorizationCode(code) {
  * Get client.
  */
 async function getClient(clientId, clientSecret) {
-  console.log('getClient', clientId, clientSecret);
-
   try {
     let options = {
       where: { client_id: clientId },
-      attributes: ['id', 'client_id', 'redirect_uri', 'scope']
+      attributes: ['id', 'redirect_uri', 'grant_types', 'scope', 'client_id']
     };
 
     if (clientSecret) {
       options.where.client_secret = clientSecret;
     }
 
-    let client = await Client.findOne(options);
+    let result = await Client.findOne(options);
 
-    if (!client) {
+    if (!result) {
       return false;
     }
 
-    let tempClient = {
-      id: client.id,
-      redirectUris: client.redirect_uris,
-      grants: client.grant_types
+    let data = {
+      id: result.id,
+      redirectUris: [result.redirect_uri],
+      grants: [
+        'authorization_code',
+        'password',
+        'refresh_token',
+        'client_credentials'
+      ]
     };
 
-    let clientWithGrants = client.toJSON();
-    clientWithGrants.grants = [
-      'authorization_code',
-      'password',
-      'refresh_token',
-      'client_credentials'
-    ];
-    // Todo: need to create another table for redirect URIs
-    clientWithGrants.redirectUris = [clientWithGrants.redirect_uri];
-    delete clientWithGrants.redirect_uri;
-    // clientWithGrants.refreshTokenLifetime = integer optional;
-    // clientWithGrants.accessTokenLifetime  = integer optional;
-    return clientWithGrants;
+    return data;
   } catch (err) {
     console.log('getClient - Err: ', err);
   }
@@ -175,13 +148,14 @@ async function getClient(clientId, clientSecret) {
  */
 async function getUser(username, password) {
   try {
-    let user = await User.findOne({
+    let result = await User.findOne({
       where: { username: username },
       attributes: ['id', 'username', 'password', 'scope']
     });
-    if (user) {
-      if (await User.checkPassword(password, user.password)) {
-        return user;
+
+    if (result) {
+      if (await User.checkPassword(password, result.password)) {
+        return result;
       } else {
         return false;
       }
@@ -197,16 +171,15 @@ async function getUser(username, password) {
  * Get user from client.
  */
 async function getUserFromClient(client) {
-  console.log('getUserFromClient', client);
-
   try {
     let options = {
       where: { client_id: client.client_id },
-      attributes: ['id', 'client_id', 'redirect_uri'],
+      attributes: ['id'],
       include: [User]
     };
-    if (client.client_secret)
+    if (client.client_secret) {
       options.where.client_secret = client.client_secret;
+    }
 
     let result = await Client.findOne(options);
     if (!result) {
@@ -223,26 +196,32 @@ async function getUserFromClient(client) {
  * Save token.
  */
 async function saveToken(token, client, user) {
-  console.log('saveToken', token, client, user);
-
   try {
-    let accessToken = await AccessToken.create({
+    let accessTokenResult = await AccessToken.create({
       access_token: token.accessToken,
       expires: token.accessTokenExpiresAt,
       scope: token.scope,
-      user_id: user.id,
-      client_id: client.id
+      client_id: client.id,
+      user_id: user.id
     });
+
+    if (!accessTokenResult) {
+      return false;
+    }
 
     if (token.refreshToken) {
       // no refresh token for client_credentials
-      let refreshToken = await RefreshToken.create({
+      let refreshTokenResult = await RefreshToken.create({
         refresh_token: token.refreshToken,
         expires: token.refreshTokenExpiresAt,
+        scope: token.scope,
         client_id: client.id,
-        user_id: user.id,
-        scope: token.scope
+        user_id: user.id
       });
+
+      if (!refreshTokenResult) {
+        return false;
+      }
     }
 
     let playload = {
@@ -261,16 +240,18 @@ async function saveToken(token, client, user) {
 
     let idToken = jwt.sign(playload, config.jwt.secret, options);
 
-    return Object.assign(
-      {
-        client,
-        user,
-        access_token: token.accessToken,
-        refresh_token: token.refreshToken,
-        id_token: idToken
-      },
-      token
-    );
+    let data = {
+      accessToken: token.accessToken,
+      accessTokenExpiresAt: token.accessTokenExpiresAt,
+      refreshToken: token.refreshToken,
+      refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+      id_token: idToken,
+      scope: token.scope,
+      client: client,
+      user: user
+    };
+
+    return data;
   } catch (err) {
     console.log('saveToken - Err: ', err);
   }
@@ -288,20 +269,24 @@ async function saveAuthorizationCode(code, client, user) {
       expires: code.expiresAt,
       redirect_uri: code.redirectUri,
       scope: code.scope,
-      user_id: user.id,
-      client_id: client.id
+      client_id: client.id,
+      user_id: user.id
     });
 
-    let tempCode = {
+    if (!authorizationCode) {
+      return false;
+    }
+
+    let data = {
       authorizationCode: code.authorizationCode,
       expires_in: Math.floor((code.expiresAt - new Date()) / 1000),
       redirectUri: code.redirectUri,
       scope: code.scope,
-      user_id: user.id,
-      client_id: client.id
+      client_id: client.id,
+      user_id: user.id
     };
 
-    return tempCode;
+    return data;
   } catch (err) {
     console.log('saveAuthorizationCode - Err: ', err);
   }
@@ -311,14 +296,16 @@ async function saveAuthorizationCode(code, client, user) {
  * Revoke token.
  */
 async function revokeToken(token) {
-  console.log('revokeToken', token);
-
   try {
-    let refreshTokenStatus = await RefreshToken.findOne({
+    let refreshToken = await RefreshToken.findOne({
       where: { refresh_token: token.refreshToken }
     });
 
-    return !!refreshTokenStatus;
+    if (refreshToken) {
+      return refreshToken.destroy();
+    }
+
+    return false;
   } catch (err) {
     console.log('revokeToken - Err: ', err);
   }
@@ -328,16 +315,16 @@ async function revokeToken(token) {
  * Revoke authorization code.
  */
 async function revokeAuthorizationCode(code) {
-  console.log('revokeAuthorizationCode', code);
-
   try {
-    let authorizationCodeStatus = await AuthorizationCode.findOne({
-      where: {
-        authorization_code: code.code
-      }
+    let authorizationCode = await AuthorizationCode.findOne({
+      where: { authorization_code: code.code }
     });
 
-    return !!authorizationCodeStatus;
+    if (authorizationCode) {
+      return authorizationCode.destroy();
+    }
+
+    return false;
   } catch (err) {
     console.log('revokeAuthorizationCode - Err: ', err);
   }
@@ -358,7 +345,16 @@ async function validateScope(user, client, scope) {
 async function verifyScope(accessToken, scope) {
   // console.log('verifyScope', accessToken, scope);
   // return accessToken.scope === scope;
-  return true;
+
+  if (!accessToken.scope) {
+    return false;
+  }
+  let requestedScopes = scope.split(',');
+  let authorizedScopes = accessToken.scope.split(',');
+
+  return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
+
+  // return true;
 }
 
 export {

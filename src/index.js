@@ -14,7 +14,7 @@ import config from '../config';
 
 import oauthRegister from './router/oauth';
 import siteRegister from './router/site';
-// import apiRegister from './router/api';
+import apiRegister from './router/api';
 
 import sequelize from './database/postgresql';
 
@@ -34,7 +34,7 @@ app.use(
 
 oauthRegister(app);
 siteRegister(app);
-// apiRegister(app);
+apiRegister(app);
 
 // sequelize.sync({force: true});
 sequelize.sync();

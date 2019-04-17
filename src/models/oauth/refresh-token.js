@@ -23,15 +23,29 @@ RefreshToken.init(
       allowNull: false
     },
     expires: DataTypes.DATE,
-    scope: DataTypes.STRING,
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
-    }
+    scope: DataTypes.STRING
+    // client_id: {
+    //   type: DataTypes.STRING(19),
+    //   references: {
+    //     model: "oauth_clients",
+    //     key: "id"
+    //   }
+    // },
+    // user_id: {
+    //   type: DataTypes.STRING(19),
+    //   references: {
+    //     model: "users",
+    //     key: "id"
+    //   }
+    // },
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
     tableName: 'oauth_refresh_tokens',
@@ -40,11 +54,13 @@ RefreshToken.init(
 );
 
 RefreshToken.belongsTo(Client, {
-  foreignKey: 'client_id'
+  foreignKey: 'client_id',
+  constraints: false
 });
 
 RefreshToken.belongsTo(User, {
-  foreignKey: 'user_id'
+  foreignKey: 'user_id',
+  constraints: false
 });
 
 export default RefreshToken;

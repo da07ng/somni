@@ -24,15 +24,29 @@ AuthorizationCode.init(
     },
     expires: DataTypes.DATE,
     redirect_uri: DataTypes.STRING,
-    scope: DataTypes.STRING,
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
-    }
+    scope: DataTypes.STRING
+    // client_id: {
+    //   type: DataTypes.STRING(19),
+    //   references: {
+    //     model: "oauth_clients",
+    //     key: "id"
+    //   }
+    // },
+    // user_id: {
+    //   type: DataTypes.STRING(19),
+    //   references: {
+    //     model: "users",
+    //     key: "id"
+    //   }
+    // },
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
     tableName: 'oauth_authorization_codes',
@@ -41,11 +55,13 @@ AuthorizationCode.init(
 );
 
 AuthorizationCode.belongsTo(Client, {
-  foreignKey: 'client_id'
+  foreignKey: 'client_id',
+  constraints: false
 });
 
 AuthorizationCode.belongsTo(User, {
-  foreignKey: 'user_id'
+  foreignKey: 'user_id',
+  constraints: false
 });
 
 export default AuthorizationCode;

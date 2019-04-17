@@ -12,7 +12,8 @@ function register(app) {
     authorizationCodeLifetime: 60 * 60 * 1,
     accessTokenLifetime: 60 * 60 * 24 * 7,
     refreshTokenLifetime: 60 * 60 * 24 * 7 * 4,
-    allowExtendedTokenAttributes: true
+    allowExtendedTokenAttributes: true,
+    scope: 'read,write'
   });
 
   const router = new Router({

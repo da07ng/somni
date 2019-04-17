@@ -13,6 +13,9 @@ const sequelize = new Sequelize(dbname, username, password, {
   dialect: 'postgres',
   host: host,
   port: port,
+  define: {
+    underscored: true
+  },
   pool: {
     max: 5,
     min: 0,
