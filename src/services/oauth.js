@@ -357,17 +357,10 @@ async function verifyScope(accessToken, scope) {
     return false;
   }
 
-  let authorizedScopes = accessToken.scope.split(',');
-  let result = await Scope.findAll({
-    attributes: ['scope']
-  });
+  let requestedScopes = scope.split(' ');
+  let authorizedScopes = accessToken.scope.split(' ');
 
-  let validateScopes = [];
-  for (const item of result) {
-    validateScopes.push(item.scope);
-  }
-
-  return authorizedScopes.every(s => validateScopes.indexOf(s) >= 0);
+  return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0);
 }
 
 export {

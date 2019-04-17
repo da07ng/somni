@@ -8,7 +8,11 @@ function register(app) {
     prefix: '/api'
   });
 
-  router.get('/user', app.oauth.authenticate(), userController.getUser);
+  router.get(
+    '/user',
+    app.oauth.authenticate({ scope: 'profile' }),
+    userController.getUser
+  );
 
   // .get('/article', articleController.fetchArticle)
   // .post('/savearticle', articleController.saveArticle);

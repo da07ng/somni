@@ -1,8 +1,10 @@
 export default {
-  mongodb: {
+  postgresql: {
     host: '127.0.0.1',
-    port: '27017',
-    name: 'somni'
+    port: '5432',
+    dbname: 'somni',
+    username: 'postgres',
+    password: 'postgres'
   },
   jwt: {
     iss: 'Somni',

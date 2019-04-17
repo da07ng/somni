@@ -5,6 +5,13 @@ import AuthorizationCode from './oauth/authorization-code';
 import RefreshToken from './oauth/refresh-token';
 import Scope from './oauth/scope';
 
+User.sync();
+Client.sync();
+AccessToken.sync();
+AuthorizationCode.sync();
+RefreshToken.sync();
+Scope.sync();
+
 const models = {
   User,
   Client,

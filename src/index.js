@@ -9,8 +9,6 @@ import path from 'path';
 
 import config from '../config';
 
-import sequelize from './database/postgresql';
-
 import SomniOAuth from './middlewares/somni-oauth';
 import * as OAuthModel from './services/oauth';
 
@@ -33,9 +31,6 @@ app.use(
   })
 );
 
-// sequelize.sync({force: true});
-sequelize.sync();
-
 app.oauth = new SomniOAuth({
   model: OAuthModel,
   allowBearerTokensInQueryString: true,
@@ -43,8 +38,7 @@ app.oauth = new SomniOAuth({
   authorizationCodeLifetime: 60 * 60 * 1,
   accessTokenLifetime: 60 * 60 * 24 * 7,
   refreshTokenLifetime: 60 * 60 * 24 * 7 * 4,
-  allowExtendedTokenAttributes: true,
-  scope: 'read,write'
+  allowExtendedTokenAttributes: true
 });
 
 oauthRegister(app);
