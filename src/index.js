@@ -7,7 +7,7 @@ import session from 'koa-session';
 import views from 'koa-views';
 import path from 'path';
 
-import config from '../config';
+import config from './config';
 
 import SomniOAuth from './middlewares/somni-oauth';
 import * as OAuthModel from './services/oauth';
