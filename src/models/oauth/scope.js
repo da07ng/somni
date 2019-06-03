@@ -16,17 +16,19 @@ Scope.init(
       }
     },
     scope: DataTypes.STRING,
-    is_default: DataTypes.BOOLEAN,
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
-    }
+    is_default: DataTypes.BOOLEAN
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
+    modelName: 'scope',
+    underscored: true,
     tableName: 'oauth_scopes',
     sequelize
   }

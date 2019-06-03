@@ -42,6 +42,8 @@ Client.init(
     // }
   },
   {
+    modelName: 'client',
+    underscored: true,
     tableName: 'oauth_clients',
     sequelize
   }

@@ -48,6 +48,8 @@ AccessToken.init(
     // }
   },
   {
+    modelName: 'access_token',
+    underscored: true,
     tableName: 'oauth_access_tokens',
     sequelize
   }

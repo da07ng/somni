@@ -49,6 +49,8 @@ AuthorizationCode.init(
     // }
   },
   {
+    modelName: 'authorization_code',
+    underscored: true,
     tableName: 'oauth_authorization_codes',
     sequelize
   }

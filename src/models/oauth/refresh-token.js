@@ -48,6 +48,8 @@ RefreshToken.init(
     // }
   },
   {
+    modelName: 'refresh_token',
+    underscored: true,
     tableName: 'oauth_refresh_tokens',
     sequelize
   }

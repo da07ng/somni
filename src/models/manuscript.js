@@ -21,19 +21,21 @@ Manuscript.init(
     content: {
       type: DataTypes.STRING
     },
-    author: {
+    author_id: {
       type: DataTypes.STRING
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
     }
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
+    modelName: 'manuscript',
+    underscored: true,
     tableName: 'manuscripts',
     sequelize
   }

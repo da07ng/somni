@@ -18,7 +18,7 @@ Reply.init(
     content: {
       type: DataTypes.STRING
     },
-    author: {
+    author_id: {
       type: DataTypes.STRING
     },
     reply_to_author: {
@@ -29,17 +29,19 @@ Reply.init(
     },
     parent_id: {
       type: DataTypes.STRING
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
     }
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
+    modelName: 'reply',
+    underscored: true,
     tableName: 'replies',
     sequelize
   }

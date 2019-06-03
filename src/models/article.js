@@ -21,20 +21,22 @@ Article.init(
     },
     content: {
       type: DataTypes.STRING
-    },
+    }
     // author: {
     //   type: DataTypes.STRING
     // },
-    createdAt: {
-      type: DataTypes.DATE,
-      field: 'created_at'
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      field: 'updated_at'
-    }
+    // createdAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'created_at'
+    // },
+    // updatedAt: {
+    //   type: DataTypes.DATE,
+    //   field: 'updated_at'
+    // }
   },
   {
+    modelName: 'article',
+    underscored: true,
     tableName: 'articles',
     sequelize
   }
