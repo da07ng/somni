@@ -1,9 +1,15 @@
-import { User } from '../../models';
+import models from '../../models';
+
+const User = models.User;
 
 export default {
   Query: {
-    users: () => {
-      return User.find({});
+    users: async () => {
+      let users = await User.findAll({
+        // attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt']
+      });
+
+      return users;
     },
     user: (obj, args, context, info) => {
       return User.findOne({ _id: args.id });

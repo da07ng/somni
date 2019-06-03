@@ -40,6 +40,7 @@ class UserService {
       name,
       redirect_uri
     };
+
     client.client_id = crypto
       .createHash('md5')
       .update(crypto.randomBytes(16))

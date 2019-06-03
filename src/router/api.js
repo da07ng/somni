@@ -5,7 +5,7 @@ import * as articleController from '../controllers/api/article';
 
 function register(app) {
   const router = new Router({
-    prefix: '/api'
+    prefix: '/v1'
   });
 
   router.get(

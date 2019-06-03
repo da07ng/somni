@@ -3,8 +3,8 @@ type Article {
   title: String
   content: String
   author: User
-  created: String
-  updated: String
+  createdAt: String
+  updatedAt: String
 }
 
 type Query {

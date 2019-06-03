@@ -2,8 +2,8 @@ type User {
   id: ID!
   username: String
   email: String
-  created: String
-  updated: String
+  createdAt: String
+  updatedAt: String
 }
 
 type Query {

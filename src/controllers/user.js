@@ -7,9 +7,7 @@ class UserController {
 
     try {
       let result = await userService.create(params);
-      ctx.body = {
-        id: result.id
-      };
+      ctx.body = result;
     } catch (err) {
       console.log('signup - Err: ', err);
     }
