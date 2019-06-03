@@ -1,11 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
 import nanoid from 'nanoid';
+import User from './user';
 
 import sequelize from '../database/postgresql';
 
-class Reply extends Model {}
+class Article extends Model {}
 
-Reply.init(
+Article.init(
   {
     id: {
       type: DataTypes.STRING(19),
@@ -15,21 +16,15 @@ Reply.init(
         return nanoid(19);
       }
     },
+    title: {
+      type: DataTypes.STRING
+    },
     content: {
       type: DataTypes.STRING
     },
-    author: {
-      type: DataTypes.STRING
-    },
-    reply_to_author: {
-      type: DataTypes.STRING
-    },
-    comment_id: {
-      type: DataTypes.STRING
-    },
-    parent_id: {
-      type: DataTypes.STRING
-    },
+    // author: {
+    //   type: DataTypes.STRING
+    // },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at'
@@ -40,9 +35,15 @@ Reply.init(
     }
   },
   {
-    tableName: 'replies',
+    tableName: 'articles',
     sequelize
   }
 );
 
-export default Reply;
+Article.belongsTo(User, {
+  as: 'author',
+  foreignKey: 'author_id',
+  constraints: false
+});
+
+export default Article;

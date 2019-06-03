@@ -34,7 +34,7 @@ Article.init(
     }
   },
   {
-    tableName: 'comments',
+    tableName: 'topics',
     sequelize
   }
 );

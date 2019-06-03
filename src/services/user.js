@@ -3,6 +3,14 @@ import models from '../models';
 const User = models.User;
 
 class UserService {
+  async list() {
+    let users = await User.findAll({
+      // attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt']
+    });
+
+    return users;
+  }
+
   async create(params) {
     const { username, email, password } = params;
 

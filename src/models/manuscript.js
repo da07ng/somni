@@ -34,7 +34,7 @@ Manuscript.init(
     }
   },
   {
-    tableName: 'comments',
+    tableName: 'manuscripts',
     sequelize
   }
 );

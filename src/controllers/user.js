@@ -52,12 +52,6 @@ class UserController {
       message: 'sign out'
     };
   }
-
-  async getUser(ctx, next) {
-    ctx.body = {
-      message: 'Secure data'
-    };
-  }
 }
 
 export default new UserController();

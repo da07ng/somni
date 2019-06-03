@@ -1,21 +1,23 @@
 import Router from 'koa-router';
 
-import * as userController from '../controllers/api/user';
-import * as articleController from '../controllers/api/article';
+import userApiv1 from '../api/v1/user';
+import articleApiv1 from '../api/v1/article';
 
 function register(app) {
   const router = new Router({
     prefix: '/v1'
   });
 
-  router.get(
-    '/user',
-    app.oauth.authenticate({ scope: 'profile' }),
-    userController.getUser
-  );
+  router
+    .get(
+      '/user',
+      app.oauth.authenticate({ scope: 'profile' }),
+      userApiv1.getUser
+    )
+    .get('/users', userApiv1.list)
 
-  // .get('/article', articleController.fetchArticle)
-  // .post('/savearticle', articleController.saveArticle);
+    .get('/articles', articleApiv1.list)
+    .post('/article', articleApiv1.save);
 
   app.use(router.routes());
   app.use(router.allowedMethods());
