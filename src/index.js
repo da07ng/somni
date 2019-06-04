@@ -15,7 +15,7 @@ import * as OAuthModel from './services/oauth';
 import { ApolloServer } from 'apollo-server-koa';
 import schema from './graphql/schema';
 
-import oauthRegister from './router/oauth';
+// import oauthRegister from './router/oauth';
 import siteRegister from './router/site';
 import apiRegister from './router/api';
 
@@ -41,7 +41,7 @@ app.oauth = new SomniOAuth({
   allowExtendedTokenAttributes: true
 });
 
-oauthRegister(app);
+// oauthRegister(app);
 siteRegister(app);
 apiRegister(app);
 

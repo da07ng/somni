@@ -37,8 +37,8 @@ async function getAccessToken(accessToken) {
       accessToken: result.access_token,
       accessTokenExpiresAt: result.expires,
       scope: result.scope,
-      client: result.Client,
-      user: result.User
+      client: result.client,
+      user: result.user
     };
 
     return data;
@@ -66,8 +66,8 @@ async function getRefreshToken(refreshToken) {
       refreshToken: refreshToken,
       refreshTokenExpiresAt: refreshToken ? new Date(result.expires) : null,
       scope: result.scope,
-      client: result.Client,
-      user: result.User
+      client: result.client,
+      user: result.user
     };
 
     return data;
@@ -96,8 +96,8 @@ async function getAuthorizationCode(authorizationCode) {
       expiresAt: result.expires,
       redirectUri: result.redirect_uri,
       scope: result.scope,
-      client: result.Client,
-      user: result.User
+      client: result.client,
+      user: result.user
     };
 
     return data;
@@ -186,7 +186,7 @@ async function getUserFromClient(client) {
       return false;
     }
 
-    return result.User;
+    return result.user;
   } catch (err) {
     console.log('getUserFromClient - Err: ', err);
   }
